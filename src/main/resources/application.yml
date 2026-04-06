@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: spring-security-tms
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}/${DB_NAME}
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+app:
+  jwt:
+    secret: ${JWT_SECRET}
+    expirationMs: 604800000 # 7 days
