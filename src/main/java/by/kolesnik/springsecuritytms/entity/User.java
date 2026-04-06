@@ -1,6 +1,6 @@
 package by.kolesnik.springsecuritytms.entity;
 
-import by.kolesnik.springsecuritytms.Role;
+import by.kolesnik.springsecuritytms.enums.Role;
 import jakarta.persistence.*;
 import lombok.Data;
 
