@@ -1,8 +1,8 @@
 package by.kolesnik.springsecuritytms.facade;
 
-import by.kolesnik.springsecuritytms.dto.LoginRequestDto;
-import by.kolesnik.springsecuritytms.dto.RegisterRequestDto;
-import by.kolesnik.springsecuritytms.dto.TokenResponseDto;
+import by.kolesnik.springsecuritytms.dto.security.LoginRequestDto;
+import by.kolesnik.springsecuritytms.dto.security.RegisterRequestDto;
+import by.kolesnik.springsecuritytms.dto.security.TokenResponseDto;
 import by.kolesnik.springsecuritytms.service.AuthService;
 import by.kolesnik.springsecuritytms.service.JwtService;
 import by.kolesnik.springsecuritytms.service.UserService;
@@ -32,8 +32,9 @@ public class AuthFacade {
     public TokenResponseDto register(RegisterRequestDto dto) {
         final String username = dto.getUsername();
         final String password = dto.getPassword();
+        final String name = dto.getName();
 
-        userService.createUser(username, password);
+        userService.createUser(username, password, name);
 
         authService.login(username, password);
 

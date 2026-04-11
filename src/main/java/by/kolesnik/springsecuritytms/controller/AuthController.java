@@ -1,8 +1,8 @@
 package by.kolesnik.springsecuritytms.controller;
 
-import by.kolesnik.springsecuritytms.dto.LoginRequestDto;
-import by.kolesnik.springsecuritytms.dto.RegisterRequestDto;
-import by.kolesnik.springsecuritytms.dto.TokenResponseDto;
+import by.kolesnik.springsecuritytms.dto.security.LoginRequestDto;
+import by.kolesnik.springsecuritytms.dto.security.RegisterRequestDto;
+import by.kolesnik.springsecuritytms.dto.security.TokenResponseDto;
 import by.kolesnik.springsecuritytms.facade.AuthFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -1,11 +1,16 @@
 package by.kolesnik.springsecuritytms.service;
 
+import by.kolesnik.springsecuritytms.entity.Group;
 import by.kolesnik.springsecuritytms.entity.User;
+import by.kolesnik.springsecuritytms.enums.Role;
 import by.kolesnik.springsecuritytms.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -15,11 +20,56 @@ public class UserService {
     private final UserRepository userRepository;
 
     //@Transactional
-    public User createUser(String username, String password) {
+    public User createUser(String username, String password, String name) {
         final User user = new User();
+        user.setName(name);
         user.setUsername(username);
         final String passwordHash = passwordEncoder.encode(password);
         user.setPassword(passwordHash);
+        user.setRole(Role.ROLE_USER); // todo: use in liquibase
         return userRepository.save(user);
+    }
+
+    public User getCurrentUser() {
+        final String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+
+        if(optionalUser.isEmpty()) {
+            throw new RuntimeException("user not found:)");
+        }
+
+        return optionalUser.get();
+    }
+
+    public Collection<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    public User findById(Long id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        if(optionalUser.isEmpty()) {
+            throw new RuntimeException("user not found:)");
+        }
+
+        return optionalUser.get();
+    }
+
+    public User findByIdAndGroupId(Long id, Group group) {
+        Optional<User> optionalUser = userRepository.findByIdAndGroups(id, group);
+
+        if(optionalUser.isEmpty()) {
+            throw new RuntimeException("user not found:)");
+        }
+
+        return optionalUser.get();
+    }
+
+    public User update(User user) {
+        return userRepository.save(user);
+    }
+
+    public void delete(Long id) {
+        userRepository.deleteById(id);
     }
 }

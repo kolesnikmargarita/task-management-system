@@ -1,6 +1,6 @@
 package by.kolesnik.springsecuritytms.service;
 
-import by.kolesnik.springsecuritytms.dto.TokenResponseDto;
+import by.kolesnik.springsecuritytms.dto.security.TokenResponseDto;
 import by.kolesnik.springsecuritytms.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
