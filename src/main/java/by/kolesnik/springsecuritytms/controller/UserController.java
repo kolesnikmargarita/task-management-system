@@ -5,6 +5,7 @@ import by.kolesnik.springsecuritytms.dto.user.UserGetDto;
 import by.kolesnik.springsecuritytms.dto.user.UserUpdateDto;
 import by.kolesnik.springsecuritytms.facade.UserFacade;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,6 +36,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         // todo: delete selected user
         userFacade.delete(id);

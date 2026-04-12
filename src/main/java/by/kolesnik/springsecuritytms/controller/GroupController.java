@@ -3,6 +3,7 @@ package by.kolesnik.springsecuritytms.controller;
 import by.kolesnik.springsecuritytms.dto.group.*;
 import by.kolesnik.springsecuritytms.facade.GroupFacade;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,6 +41,7 @@ public class GroupController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         groupFacade.delete(id);
     }

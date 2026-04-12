@@ -6,6 +6,7 @@ import by.kolesnik.springsecuritytms.dto.task.TaskUpdateDto;
 import by.kolesnik.springsecuritytms.dto.task.TaskGetDto;
 import by.kolesnik.springsecuritytms.facade.TaskFacade;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,6 +40,7 @@ public class TaskController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         taskFacade.delete(id);
     }
