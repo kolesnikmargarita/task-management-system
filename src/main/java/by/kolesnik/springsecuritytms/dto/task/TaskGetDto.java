@@ -15,7 +15,7 @@ public class TaskGetDto {
 
     private Long id;
     private String description;
-    private Long creatorId;
+    private UserGetBasicDto creator;
     private Status status;
     private LocalDateTime createDateTime;
     private LocalDateTime deadlineDate;

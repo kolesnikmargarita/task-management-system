@@ -51,7 +51,7 @@ public class TaskFacade {
         task.setGroup(group);
 
         User currentUser = userService.getCurrentUser();
-        task.setCreatorId(currentUser.getId());
+        task.setCreator(currentUser);
         task.setCreateDateTime(LocalDateTime.now());
         task.setStatus(Status.CREATED);
 

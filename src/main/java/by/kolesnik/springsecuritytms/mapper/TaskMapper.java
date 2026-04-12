@@ -15,7 +15,7 @@ public class TaskMapper {
         dto.setAssignedUser(UserMapper.toGetBasicDto(entity.getAssignedUser()));
         dto.setPriority(entity.getPriority());
         dto.setStatus(entity.getStatus());
-        dto.setCreatorId(entity.getCreatorId());
+        dto.setCreator(UserMapper.toGetBasicDto(entity.getCreator()));
         dto.setDeadlineDate(entity.getDeadlineDate());
         dto.setCreateDateTime(entity.getCreateDateTime());
 
@@ -30,7 +30,7 @@ public class TaskMapper {
         dto.setGroup(GroupMapper.toGetBasicDto(entity.getGroup()));
         dto.setDescription(entity.getDescription());
         dto.setPriority(entity.getPriority());
-        dto.setCreatorId(entity.getCreatorId());
+        dto.setCreator(UserMapper.toGetBasicDto(entity.getCreator()));
         dto.setStatus(entity.getStatus());
         dto.setDeadlineDate(entity.getDeadlineDate());
 

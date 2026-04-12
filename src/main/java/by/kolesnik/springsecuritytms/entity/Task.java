@@ -21,8 +21,9 @@ public class Task {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "creator_id", nullable = false)
-    private Long creatorId;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "creator_id")
+    private User creator;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
@@ -42,7 +43,7 @@ public class Task {
     @JoinColumn(name = "group_id")
     private Group group;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "assigned_user_id")
     private User assignedUser;
 }

@@ -16,13 +16,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name") // todo: notnull
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "username", unique = true)
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
 
-    @Column(name = "password") // todo: notnull
+    @Column(name = "password", nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -34,4 +34,7 @@ public class User {
 
     @OneToMany(mappedBy = "assignedUser", fetch = FetchType.LAZY)
     private Collection<Task> tasks;
+
+    @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Collection<Task> createdTasks;
 }
