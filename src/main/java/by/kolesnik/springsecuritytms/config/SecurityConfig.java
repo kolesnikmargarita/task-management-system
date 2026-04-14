@@ -1,5 +1,6 @@
 package by.kolesnik.springsecuritytms.config;
 
+import by.kolesnik.springsecuritytms.enums.Role;
 import by.kolesnik.springsecuritytms.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -35,7 +36,8 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authorizeHttpRequests(request ->
-                        request.requestMatchers("/auth/**").permitAll()
+                        request.requestMatchers("/auth/**", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll()
+                                .requestMatchers("/groups/**", "/users/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                         )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
