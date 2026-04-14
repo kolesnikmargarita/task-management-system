@@ -1,9 +1,6 @@
 package by.kolesnik.springsecuritytms.facade;
 
-import by.kolesnik.springsecuritytms.dto.task.TaskCreateDto;
-import by.kolesnik.springsecuritytms.dto.task.TaskGetBasicDto;
-import by.kolesnik.springsecuritytms.dto.task.TaskGetDto;
-import by.kolesnik.springsecuritytms.dto.task.TaskUpdateDto;
+import by.kolesnik.springsecuritytms.dto.task.*;
 import by.kolesnik.springsecuritytms.entity.Group;
 import by.kolesnik.springsecuritytms.entity.Task;
 import by.kolesnik.springsecuritytms.entity.User;
@@ -33,8 +30,18 @@ public class TaskFacade {
         return tasks.stream().map(TaskMapper::toGetDto).toList();
     }
 
+    public List<TaskGetDto> findAllForCurrentUser() {
+        Collection<Task> tasks = taskService.findAllForCurrentUser();
+        return tasks.stream().map(TaskMapper::toGetDto).toList();
+    }
+
     public TaskGetDto findById(Long id) {
         Task task = taskService.findById(id);
+        return TaskMapper.toGetDto(task);
+    }
+
+    public TaskGetDto findByIdForCurrentUser(Long id) {
+        Task task = taskService.findByIdForCurrentUser(id);
         return TaskMapper.toGetDto(task);
     }
 
@@ -61,6 +68,11 @@ public class TaskFacade {
     @Transactional
     public TaskGetDto update(Long id, TaskUpdateDto dto) {
         Task task = taskService.findById(id);
+        // todo: проверку на задачу текущего пользователя
+
+        if(!task.getAssignedUser().equals(userService.getCurrentUser())) {
+            throw new RuntimeException("it is not your task"); //todo: valid exception
+        }
 
         if(dto.getPriority() != null) {
             task.setPriority(dto.getPriority());
@@ -85,7 +97,14 @@ public class TaskFacade {
         return TaskMapper.toGetDto(taskService.update(task));
     }
 
+    public TaskGetDto updateStatus(Long id, TaskUserUpdateDto dto) {
+        Task task = taskService.findById(id);
+        task.setStatus(dto.getStatus());
+        return TaskMapper.toGetDto(taskService.update(task));
+    }
+
     public void delete(Long id) {
         taskService.delete(id);
     }
+
 }
