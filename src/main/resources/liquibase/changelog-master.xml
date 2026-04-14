@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+    
+    <changeSet id="2026-04-12_02-48-00" author="Margarita Kolesnik">
+        <createSequence sequenceName="users_id_seq" startValue="1" incrementBy="1"/>
+        <createTable tableName="users">
+            <column name="id" type="BIGINT" defaultValueComputed="nextval('users_id_seq')">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_users"/>
+            </column>
+            <column name="name" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="VARCHAR">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="VARCHAR" defaultValue="ROLE_USER">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createSequence sequenceName="groups_id_seq" startValue="1" incrementBy="1"/>
+        <createTable tableName="groups">
+            <column name="id" type="BIGINT" defaultValueComputed="nextval('groups_id_seq')">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_groups"/>
+            </column>
+            <column name="name" type="VARCHAR">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="groups_users">
+            <column name="group_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="group_id" baseTableName="groups_users" constraintName="fk_groups_users_to_groups" referencedColumnNames="id" referencedTableName="groups" />
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="groups_users" constraintName="fk_groups_users_to_users" referencedColumnNames="id" referencedTableName="users" />
+
+        <createSequence sequenceName="tasks_id_seq" startValue="1" incrementBy="1"/>
+        <createTable tableName="tasks">
+            <column name="id" type="BIGINT" defaultValueComputed="nextval('tasks_id_seq')">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_tasks"/>
+            </column>
+            <column name="description" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date_time" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deadline_date" type="TIMESTAMP WITHOUT TIME ZONE">
+            </column>
+            <column name="priority" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creator_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="group_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="assigned_user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="creator_id" baseTableName="tasks" constraintName="fk_tasks_to_creators" referencedColumnNames="id" referencedTableName="users" />
+        <addForeignKeyConstraint baseColumnNames="group_id" baseTableName="tasks" constraintName="fk_tasks_to_groups" referencedColumnNames="id" referencedTableName="groups" />
+        <addForeignKeyConstraint baseColumnNames="assigned_user_id" baseTableName="tasks" constraintName="fk_tasks_to_assigned" referencedColumnNames="id" referencedTableName="users" />
+    </changeSet>
+
+</databaseChangeLog>
