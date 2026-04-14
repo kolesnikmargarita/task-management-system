@@ -4,6 +4,7 @@ import by.kolesnik.springsecuritytms.entity.Group;
 import by.kolesnik.springsecuritytms.entity.User;
 import by.kolesnik.springsecuritytms.enums.Role;
 import by.kolesnik.springsecuritytms.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,7 +36,7 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findByUsername(username);
 
         if(optionalUser.isEmpty()) {
-            throw new RuntimeException("user not found:)");
+            throw new EntityNotFoundException("current user not found");
         }
 
         return optionalUser.get();
@@ -49,7 +50,7 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findById(id);
 
         if(optionalUser.isEmpty()) {
-            throw new RuntimeException("user not found:)");
+            throw new EntityNotFoundException("user with id=" + id + " not found");
         }
 
         return optionalUser.get();
@@ -59,7 +60,7 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findByIdAndGroups(id, group);
 
         if(optionalUser.isEmpty()) {
-            throw new RuntimeException("user not found:)");
+            throw new EntityNotFoundException("user with id=" + id + " not found in this group");
         }
 
         return optionalUser.get();

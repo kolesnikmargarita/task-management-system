@@ -2,6 +2,7 @@ package by.kolesnik.springsecuritytms.service;
 
 import by.kolesnik.springsecuritytms.entity.Group;
 import by.kolesnik.springsecuritytms.repository.GroupRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ public class GroupService {
         Optional<Group> group = groupRepository.findById(id);
 
         if(group.isEmpty()) {
-            throw new RuntimeException("group not found"); // todo: change with valid Exceptions
+            throw new EntityNotFoundException("group with id=" + id + " not found");
         }
 
         return group.get();
