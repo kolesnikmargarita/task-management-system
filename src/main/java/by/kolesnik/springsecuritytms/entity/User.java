@@ -27,7 +27,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
-    private Role role;
+    private Role role = Role.ROLE_USER;
 
     @ManyToMany(mappedBy = "users")
     private Collection<Group> groups;
