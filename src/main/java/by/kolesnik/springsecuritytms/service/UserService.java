@@ -27,7 +27,9 @@ public class UserService {
         user.setUsername(username);
         final String passwordHash = passwordEncoder.encode(password);
         user.setPassword(passwordHash);
-        user.setRole(Role.ROLE_USER); // todo: use in liquibase
+        if(findAll().isEmpty()) {
+            user.setRole(Role.ROLE_ADMIN); // todo: use in liquibase
+        }
         return userRepository.save(user);
     }
 
