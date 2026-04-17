@@ -10,16 +10,17 @@ spring:
     hibernate:
       ddl-auto: validate
   liquibase:
-    change-log: src/main/resources/liquibase/changelog-master.xml
-    enable: true
-
-springdoc:
-  api-docs:
-    enabled: true
-  swagger-ui:
-    enabled: true
+    change-log: liquibase/changelog-master.xml
 
 app:
   jwt:
     secret: ${JWT_SECRET}
     expirationMs: 604800000 # 7 days
+
+
+
+    #springdoc:
+     # api-docs:
+     #   enabled: true
+      #swagger-ui:
+       # enabled: true
