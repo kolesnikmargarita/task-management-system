@@ -3,6 +3,9 @@ package by.kolesnik.springsecuritytms.controller;
 import by.kolesnik.springsecuritytms.controller.openapi.GroupOpenApi;
 import by.kolesnik.springsecuritytms.dto.group.*;
 import by.kolesnik.springsecuritytms.facade.GroupFacade;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@SecurityScheme(type = SecuritySchemeType.HTTP, name = "bearerAuth", scheme = "bearer", bearerFormat = "JWT")
+@SecurityRequirement(name = "bearerAuth")
 @RequestMapping("/groups")
 @RequiredArgsConstructor
 public class GroupController implements GroupOpenApi {

@@ -3,6 +3,9 @@ package by.kolesnik.springsecuritytms.controller;
 import by.kolesnik.springsecuritytms.controller.openapi.TaskOpenApi;
 import by.kolesnik.springsecuritytms.dto.task.*;
 import by.kolesnik.springsecuritytms.facade.TaskFacade;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@SecurityScheme(type = SecuritySchemeType.HTTP, name = "bearerAuth", scheme = "bearer", bearerFormat = "JWT")
+@SecurityRequirement(name = "bearerAuth")
 @RequestMapping("/tasks")
 @EnableMethodSecurity
 @RequiredArgsConstructor
