@@ -1,6 +1,8 @@
 package by.kolesnik.springsecuritytms.service;
 
 import by.kolesnik.springsecuritytms.entity.Task;
+import by.kolesnik.springsecuritytms.exception.DeadlineInPastException;
+import by.kolesnik.springsecuritytms.exception.NotCurrentUserTaskException;
 import by.kolesnik.springsecuritytms.repository.TaskRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +48,7 @@ public class TaskService {
 
     public Task create(Task task) {
         if(!task.getDeadlineDate().isAfter(task.getCreateDateTime())) {
-            throw new EntityNotFoundException("deadline should be in future");
+            throw new DeadlineInPastException("deadline should be in future");
         }
 
         return taskRepository.save(task);
@@ -54,10 +56,10 @@ public class TaskService {
 
     public Task update(Task task) {
         if(!task.getDeadlineDate().isAfter(task.getCreateDateTime())) {
-            throw new EntityNotFoundException("deadline should be in future");
+            throw new DeadlineInPastException("deadline should be in future");
         }
         if(!task.getAssignedUser().equals(userService.getCurrentUser())) {
-            throw new EntityNotFoundException("it is not your task");
+            throw new NotCurrentUserTaskException("it is not your task");
         }
 
         return taskRepository.save(task);

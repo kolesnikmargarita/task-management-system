@@ -2,7 +2,6 @@ package by.kolesnik.springsecuritytms.controller.openapi;
 
 import by.kolesnik.springsecuritytms.dto.ErrorResponse;
 import by.kolesnik.springsecuritytms.dto.task.*;
-import by.kolesnik.springsecuritytms.dto.user.UserGetBasicDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,9 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -220,6 +217,19 @@ public interface TaskOpenApi {
                                     }
                                     """)
                     )
+            ),
+            @ApiResponse(
+                    description = "Указанная задача не назначена текущему пользователю",
+                    responseCode = "400",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            array = @ArraySchema(schema = @Schema(implementation = ErrorResponse.class)),
+                            examples = @ExampleObject("""
+                                    {
+                                          "message": "it is not your task"
+                                    }
+                                    """)
+                    )
             )
     })
     TaskGetDto findByIdForCurrentUser(@PathVariable Long id);
@@ -287,7 +297,7 @@ public interface TaskOpenApi {
             ),
             @ApiResponse(
                     description = "Дедлайне раньше даты создания",
-                    responseCode = "404",
+                    responseCode = "400",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             array = @ArraySchema(schema = @Schema(implementation = ErrorResponse.class)),
@@ -350,6 +360,19 @@ public interface TaskOpenApi {
                             examples = @ExampleObject("""
                                     {
                                          "message": "user with id=7 not found"
+                                    }
+                                    """)
+                    )
+            ),
+            @ApiResponse(
+                    description = "Дедлайне раньше даты создания",
+                    responseCode = "400",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            array = @ArraySchema(schema = @Schema(implementation = ErrorResponse.class)),
+                            examples = @ExampleObject("""
+                                    {
+                                          "message": "deadline should be in future"
                                     }
                                     """)
                     )

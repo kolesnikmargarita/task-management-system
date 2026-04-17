@@ -5,6 +5,7 @@ import by.kolesnik.springsecuritytms.entity.Group;
 import by.kolesnik.springsecuritytms.entity.Task;
 import by.kolesnik.springsecuritytms.entity.User;
 import by.kolesnik.springsecuritytms.enums.Status;
+import by.kolesnik.springsecuritytms.exception.NotCurrentUserTaskException;
 import by.kolesnik.springsecuritytms.mapper.TaskMapper;
 import by.kolesnik.springsecuritytms.service.GroupService;
 import by.kolesnik.springsecuritytms.service.TaskService;
@@ -68,10 +69,9 @@ public class TaskFacade {
     @Transactional
     public TaskGetDto update(Long id, TaskUpdateDto dto) {
         Task task = taskService.findById(id);
-        // todo: проверку на задачу текущего пользователя
 
         if(!task.getAssignedUser().equals(userService.getCurrentUser())) {
-            throw new RuntimeException("it is not your task"); //todo: valid exception
+            throw new NotCurrentUserTaskException("it is not your task");
         }
 
         if(dto.getPriority() != null) {
