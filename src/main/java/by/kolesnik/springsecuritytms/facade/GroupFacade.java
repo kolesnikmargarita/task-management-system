@@ -20,7 +20,6 @@ public class GroupFacade {
 
     private final GroupService groupService;
     private final UserService userService;
-    //private final GroupMapper groupMapper;
 
     public List<GroupGetBasicDto> findAll() {
         Collection<Group> groups = groupService.findAll();

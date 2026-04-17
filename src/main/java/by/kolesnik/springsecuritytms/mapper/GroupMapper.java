@@ -3,7 +3,6 @@ package by.kolesnik.springsecuritytms.mapper;
 import by.kolesnik.springsecuritytms.dto.group.GroupCreateDto;
 import by.kolesnik.springsecuritytms.dto.group.GroupGetBasicDto;
 import by.kolesnik.springsecuritytms.dto.group.GroupGetDto;
-import by.kolesnik.springsecuritytms.dto.group.GroupUpdateDto;
 import by.kolesnik.springsecuritytms.dto.task.TaskGetDto;
 import by.kolesnik.springsecuritytms.dto.user.UserGetBasicDto;
 import by.kolesnik.springsecuritytms.entity.Group;
@@ -14,8 +13,6 @@ import java.util.Collection;
 import java.util.List;
 
 public class GroupMapper {
-
-    //private final TaskMapper taskMapper = new TaskMapper();
 
     public static GroupGetBasicDto toGetBasicDto(Group entity) {
 

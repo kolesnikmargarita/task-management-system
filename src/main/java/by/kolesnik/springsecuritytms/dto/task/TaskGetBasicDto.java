@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class TaskGetBasicDto {
+
     private Long id;
     private String description;
     private UserGetBasicDto creator;

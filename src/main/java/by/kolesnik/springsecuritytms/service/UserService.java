@@ -20,7 +20,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
-    //@Transactional
     public User createUser(String username, String password, String name) {
         final User user = new User();
         user.setName(name);
@@ -28,7 +27,7 @@ public class UserService {
         final String passwordHash = passwordEncoder.encode(password);
         user.setPassword(passwordHash);
         if(findAll().isEmpty()) {
-            user.setRole(Role.ROLE_ADMIN); // todo: use in liquibase
+            user.setRole(Role.ROLE_ADMIN);
         }
         return userRepository.save(user);
     }

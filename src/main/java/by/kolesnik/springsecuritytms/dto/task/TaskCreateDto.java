@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class TaskCreateDto {
+
     private String description;
     private LocalDateTime deadlineDate;
     private Priority priority;
