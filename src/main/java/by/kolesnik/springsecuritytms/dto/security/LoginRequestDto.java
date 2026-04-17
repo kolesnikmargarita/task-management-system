@@ -1,4 +1,4 @@
-package by.kolesnik.springsecuritytms.dto;
+package by.kolesnik.springsecuritytms.dto.security;
 
 import lombok.Data;
 
