@@ -1,4 +1,4 @@
-package by.kolesnik.springsecuritytms.service;
+package by.kolesnik.springsecuritytms.service.authorization;
 
 import by.kolesnik.springsecuritytms.entity.User;
 import by.kolesnik.springsecuritytms.model.ExtendedUserDetails;

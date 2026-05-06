@@ -4,12 +4,18 @@ import by.kolesnik.springsecuritytms.dto.task.*;
 import by.kolesnik.springsecuritytms.entity.Group;
 import by.kolesnik.springsecuritytms.entity.Task;
 import by.kolesnik.springsecuritytms.entity.User;
+import by.kolesnik.springsecuritytms.enums.CacheMode;
 import by.kolesnik.springsecuritytms.enums.Status;
 import by.kolesnik.springsecuritytms.exception.NotCurrentUserTaskException;
 import by.kolesnik.springsecuritytms.mapper.TaskMapper;
-import by.kolesnik.springsecuritytms.service.GroupService;
-import by.kolesnik.springsecuritytms.service.TaskService;
-import by.kolesnik.springsecuritytms.service.UserService;
+import by.kolesnik.springsecuritytms.service.*;
+import by.kolesnik.springsecuritytms.service.db.GroupServiceDB;
+import by.kolesnik.springsecuritytms.service.db.TaskServiceDB;
+import by.kolesnik.springsecuritytms.service.db.UserServiceDB;
+import by.kolesnik.springsecuritytms.service.manual.ManualCachingGroupService;
+import by.kolesnik.springsecuritytms.service.manual.ManualCachingTaskService;
+import by.kolesnik.springsecuritytms.service.spring.SpringAnnotationCachingGroupService;
+import by.kolesnik.springsecuritytms.service.spring.SpringAnnotationCachingTaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,32 +28,51 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TaskFacade {
 
-    private final TaskService taskService;
-    private final GroupService groupService;
-    private final UserService userService;
+    private final TaskServiceDB taskServiceDB;
+    private final ManualCachingTaskService manualCachingTaskService;
+    private final SpringAnnotationCachingTaskService springAnnotationCachingTaskService;
+    private final GroupServiceDB groupServiceDB;
+    private final ManualCachingGroupService manualCachingGroupService;
+    private final SpringAnnotationCachingGroupService springAnnotationCachingGroupService;
+    private final UserServiceDB userService;
 
-    public List<TaskGetDto> findAll() {
+    @Transactional(readOnly = true)
+    public List<TaskGetDto> findAll(CacheMode cacheMode) {
+        TaskServiceInterface taskService = resolveTaskService(cacheMode);
+
         Collection<Task> tasks = taskService.findAll();
         return tasks.stream().map(TaskMapper::toGetDto).toList();
     }
 
-    public List<TaskGetDto> findAllForCurrentUser() {
+    @Transactional(readOnly = true)
+    public List<TaskGetDto> findAllForCurrentUser(CacheMode cacheMode) {
+        TaskServiceInterface taskService = resolveTaskService(cacheMode);
+
         Collection<Task> tasks = taskService.findAllForCurrentUser();
         return tasks.stream().map(TaskMapper::toGetDto).toList();
     }
 
-    public TaskGetDto findById(Long id) {
+    @Transactional(readOnly = true)
+    public TaskGetDto findById(Long id, CacheMode cacheMode) {
+        TaskServiceInterface taskService = resolveTaskService(cacheMode);
+
         Task task = taskService.findById(id);
         return TaskMapper.toGetDto(task);
     }
 
-    public TaskGetDto findByIdForCurrentUser(Long id) {
+    @Transactional(readOnly = true)
+    public TaskGetDto findByIdForCurrentUser(Long id, CacheMode cacheMode) {
+        TaskServiceInterface taskService = resolveTaskService(cacheMode);
+
         Task task = taskService.findByIdForCurrentUser(id);
         return TaskMapper.toGetDto(task);
     }
 
     @Transactional
-    public TaskGetBasicDto create(TaskCreateDto dto) {
+    public TaskGetBasicDto create(TaskCreateDto dto, CacheMode cacheMode) {
+        TaskServiceInterface taskService = resolveTaskService(cacheMode);
+        GroupServiceInterface groupService = resolveGroupService(cacheMode);
+
         Task task = new Task();
 
         Group group = groupService.findById(dto.getGroupId());
@@ -67,7 +92,10 @@ public class TaskFacade {
     }
 
     @Transactional
-    public TaskGetDto update(Long id, TaskUpdateDto dto) {
+    public TaskGetDto update(Long id, TaskUpdateDto dto, CacheMode cacheMode) {
+        TaskServiceInterface taskService = resolveTaskService(cacheMode);
+        GroupServiceInterface groupService = resolveGroupService(cacheMode);
+
         Task task = taskService.findById(id);
 
         if(!task.getAssignedUser().equals(userService.getCurrentUser())) {
@@ -97,14 +125,36 @@ public class TaskFacade {
         return TaskMapper.toGetDto(taskService.update(task));
     }
 
-    public TaskGetDto updateStatus(Long id, TaskUserUpdateDto dto) {
+    @Transactional
+    public TaskGetDto updateStatus(Long id, TaskUserUpdateDto dto, CacheMode cacheMode) {
+        TaskServiceInterface taskService = resolveTaskService(cacheMode);
+
         Task task = taskService.findById(id);
         task.setStatus(dto.getStatus());
         return TaskMapper.toGetDto(taskService.update(task));
     }
 
-    public void delete(Long id) {
+    @Transactional
+    public void delete(Long id, CacheMode cacheMode) {
+        TaskServiceInterface taskService = resolveTaskService(cacheMode);
+
         taskService.delete(id);
+    }
+
+    private TaskServiceInterface resolveTaskService(CacheMode cacheMode) {
+        return switch (cacheMode) {
+            case NONE_CACHE -> taskServiceDB;
+            case MANUAL -> manualCachingTaskService;
+            case SPRING -> springAnnotationCachingTaskService;
+        };
+    }
+
+    private GroupServiceInterface resolveGroupService(CacheMode cacheMode) {
+        return switch (cacheMode) {
+            case NONE_CACHE -> groupServiceDB;
+            case MANUAL -> manualCachingGroupService;
+            case SPRING -> springAnnotationCachingGroupService;
+        };
     }
 
 }

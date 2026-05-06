@@ -1,4 +1,4 @@
-package by.kolesnik.springsecuritytms.service;
+package by.kolesnik.springsecuritytms.service.authorization;
 
 import by.kolesnik.springsecuritytms.dto.security.TokenResponseDto;
 import by.kolesnik.springsecuritytms.util.JwtUtils;

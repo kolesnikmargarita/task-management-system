@@ -3,6 +3,7 @@ package by.kolesnik.springsecuritytms.controller.openapi;
 import by.kolesnik.springsecuritytms.dto.ErrorResponse;
 import by.kolesnik.springsecuritytms.dto.group.*;
 import by.kolesnik.springsecuritytms.dto.user.UserGetBasicDto;
+import by.kolesnik.springsecuritytms.enums.CacheMode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -58,7 +59,7 @@ public interface GroupOpenApi {
                     )
             )
     })
-    List<GroupGetBasicDto> findAll();
+    List<GroupGetBasicDto> findAll(@RequestParam(value = "cacheMode", defaultValue = "NONE_CACHE") CacheMode cacheMode);
 
     @Operation(
             method = "GET",
@@ -98,7 +99,7 @@ public interface GroupOpenApi {
                     )
             )
     })
-    GroupGetDto findById(@PathVariable Long id);
+    GroupGetDto findById(@PathVariable Long id, @RequestParam(value = "cacheMode", defaultValue = "NONE_CACHE") CacheMode cacheMode);
 
     @Operation(
             method = "POST",
@@ -136,7 +137,7 @@ public interface GroupOpenApi {
                     )
             )
     })
-    GroupGetBasicDto create(@RequestBody GroupCreateDto dto);
+    GroupGetBasicDto create(@RequestBody GroupCreateDto dto, @RequestParam(value = "cacheMode", defaultValue = "NONE_CACHE") CacheMode cacheMode);
 
     @Operation(
             method = "PATCH",
@@ -174,7 +175,7 @@ public interface GroupOpenApi {
                     )
             )
     })
-    GroupGetBasicDto update(@PathVariable Long id, @RequestBody GroupUpdateDto dto);
+    GroupGetBasicDto update(@PathVariable Long id, @RequestBody GroupUpdateDto dto, @RequestParam(value = "cacheMode", defaultValue = "NONE_CACHE") CacheMode cacheMode);
 
     @Operation(
             method = "PATCH",
@@ -246,7 +247,7 @@ public interface GroupOpenApi {
                     )
             )
     })
-    GroupGetDto addUser(@PathVariable Long id, @RequestBody GroupUserAddDto userAddDto);
+    GroupGetDto addUser(@PathVariable Long id, @RequestBody GroupUserAddDto userAddDto, @RequestParam(value = "cacheMode", defaultValue = "NONE_CACHE") CacheMode cacheMode);
 
     @Operation(
             method = "DELETE",
@@ -287,5 +288,5 @@ public interface GroupOpenApi {
                     )
             )
     })
-    void delete(@PathVariable Long id);
+    void delete(@PathVariable Long id, @RequestParam(value = "cacheMode", defaultValue = "NONE_CACHE") CacheMode cacheMode);
 }

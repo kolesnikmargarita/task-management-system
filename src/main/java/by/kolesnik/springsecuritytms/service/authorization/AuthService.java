@@ -1,4 +1,4 @@
-package by.kolesnik.springsecuritytms.service;
+package by.kolesnik.springsecuritytms.service.authorization;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;

@@ -4,6 +4,7 @@ import by.kolesnik.springsecuritytms.dto.ErrorResponse;
 import by.kolesnik.springsecuritytms.dto.user.UserGetBasicDto;
 import by.kolesnik.springsecuritytms.dto.user.UserGetDto;
 import by.kolesnik.springsecuritytms.dto.user.UserUpdateDto;
+import by.kolesnik.springsecuritytms.enums.CacheMode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -61,7 +63,7 @@ public interface UserOpenApi {
                     )
             )
     })
-    List<UserGetBasicDto> findAll();
+    List<UserGetBasicDto> findAll(@RequestParam(value = "cacheMode", defaultValue = "NONE_CACHE") CacheMode cacheMode);
 
     @Operation(
             method = "GET",
@@ -122,7 +124,7 @@ public interface UserOpenApi {
                     )
             )
     })
-    UserGetDto findById(@PathVariable Long id);
+    UserGetDto findById(@PathVariable Long id, @RequestParam(value = "cacheMode", defaultValue = "NONE_CACHE") CacheMode cacheMode);
 
     @Operation(
             method = "PATCH",
@@ -174,7 +176,7 @@ public interface UserOpenApi {
                     )
             )
     })
-    UserGetBasicDto update(@PathVariable Long id, @RequestBody UserUpdateDto dto);
+    UserGetBasicDto update(@PathVariable Long id, @RequestBody UserUpdateDto dto, @RequestParam(value = "cacheMode", defaultValue = "NONE_CACHE") CacheMode cacheMode);
 
     @Operation(
             method = "DELETE",
@@ -215,5 +217,5 @@ public interface UserOpenApi {
                     )
             )
     })
-    void delete(@PathVariable Long id);
+    void delete(@PathVariable Long id, @RequestParam(value = "cacheMode", defaultValue = "NONE_CACHE") CacheMode cacheMode);
 }

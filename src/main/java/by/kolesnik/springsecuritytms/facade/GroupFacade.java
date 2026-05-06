@@ -3,9 +3,13 @@ package by.kolesnik.springsecuritytms.facade;
 import by.kolesnik.springsecuritytms.dto.group.*;
 import by.kolesnik.springsecuritytms.entity.Group;
 import by.kolesnik.springsecuritytms.entity.User;
+import by.kolesnik.springsecuritytms.enums.CacheMode;
 import by.kolesnik.springsecuritytms.mapper.GroupMapper;
-import by.kolesnik.springsecuritytms.service.GroupService;
-import by.kolesnik.springsecuritytms.service.UserService;
+import by.kolesnik.springsecuritytms.service.GroupServiceInterface;
+import by.kolesnik.springsecuritytms.service.db.GroupServiceDB;
+import by.kolesnik.springsecuritytms.service.db.UserServiceDB;
+import by.kolesnik.springsecuritytms.service.manual.ManualCachingGroupService;
+import by.kolesnik.springsecuritytms.service.spring.SpringAnnotationCachingGroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,27 +22,39 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GroupFacade {
 
-    private final GroupService groupService;
-    private final UserService userService;
+    private final GroupServiceDB groupServiceDB;
+    private final ManualCachingGroupService manualCachingGroupService;
+    private final SpringAnnotationCachingGroupService springAnnotationCachingGroupService;
+    private final UserServiceDB userService;
 
-    public List<GroupGetBasicDto> findAll() {
+    @Transactional(readOnly = true)
+    public List<GroupGetBasicDto> findAll(CacheMode cacheMode) {
+        GroupServiceInterface groupService = resolveGroupService(cacheMode);
+
         Collection<Group> groups = groupService.findAll();
         return groups.stream().map(GroupMapper::toGetBasicDto).toList();
     }
 
-    public GroupGetDto findById(Long id) {
+    @Transactional(readOnly = true)
+    public GroupGetDto findById(Long id, CacheMode cacheMode) {
+        GroupServiceInterface groupService = resolveGroupService(cacheMode);
+
         Group group = groupService.findById(id);
         return GroupMapper.toGetDto(group);
     }
 
     @Transactional
-    public GroupGetBasicDto create(GroupCreateDto dto) {
+    public GroupGetBasicDto create(GroupCreateDto dto, CacheMode cacheMode) {
+        GroupServiceInterface groupService = resolveGroupService(cacheMode);
+
         Group groupEntity = groupService.create(GroupMapper.toEntity(dto));
         return GroupMapper.toGetBasicDto(groupEntity);
     }
 
     @Transactional
-    public GroupGetBasicDto update(Long id, GroupUpdateDto dto) {
+    public GroupGetBasicDto update(Long id, GroupUpdateDto dto, CacheMode cacheMode) {
+        GroupServiceInterface groupService = resolveGroupService(cacheMode);
+
         Group group = groupService.findById(id);
 
         if(dto.getName() != null) {
@@ -49,7 +65,9 @@ public class GroupFacade {
     }
 
     @Transactional
-    public GroupGetDto addUser(Long groupId, GroupUserAddDto userDto) {
+    public GroupGetDto addUser(Long groupId, GroupUserAddDto userDto, CacheMode cacheMode) {
+        GroupServiceInterface groupService = resolveGroupService(cacheMode);
+
         Group group = groupService.findById(groupId);
         ArrayList<User> users = new ArrayList<>(group.getUsers().stream().toList());
         users.add(userService.findById(userDto.getUserId()));
@@ -57,7 +75,18 @@ public class GroupFacade {
         return GroupMapper.toGetDto(groupService.update(group));
     }
 
-    public void delete(Long id) {
+    @Transactional
+    public void delete(Long id, CacheMode cacheMode) {
+        GroupServiceInterface groupService = resolveGroupService(cacheMode);
+
         groupService.delete(id);
+    }
+
+    private GroupServiceInterface resolveGroupService(CacheMode cacheMode) {
+        return switch (cacheMode) {
+            case NONE_CACHE -> groupServiceDB;
+            case MANUAL -> manualCachingGroupService;
+            case SPRING -> springAnnotationCachingGroupService;
+        };
     }
 }

@@ -2,6 +2,7 @@ package by.kolesnik.springsecuritytms.controller.openapi;
 
 import by.kolesnik.springsecuritytms.dto.ErrorResponse;
 import by.kolesnik.springsecuritytms.dto.task.*;
+import by.kolesnik.springsecuritytms.enums.CacheMode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -62,7 +63,7 @@ public interface TaskOpenApi {
                     )
             )
     })
-    List<TaskGetDto> findAll();
+    List<TaskGetDto> findAll(@RequestParam(value = "cacheMode", defaultValue = "NONE_CACHE") CacheMode cacheMode);
 
     @Operation(
             method = "GET",
@@ -107,7 +108,7 @@ public interface TaskOpenApi {
                     )
             )
     })
-    List<TaskGetDto> findAllForCurrentUser();
+    List<TaskGetDto> findAllForCurrentUser(@RequestParam(value = "cacheMode", defaultValue = "NONE_CACHE") CacheMode cacheMode);
 
     @Operation(
             method = "GET",
@@ -163,7 +164,7 @@ public interface TaskOpenApi {
                     )
             )
     })
-    TaskGetDto findById(@PathVariable Long id);
+    TaskGetDto findById(@PathVariable Long id, @RequestParam(value = "cacheMode", defaultValue = "NONE_CACHE") CacheMode cacheMode);
 
     @Operation(
             method = "GET",
@@ -232,7 +233,7 @@ public interface TaskOpenApi {
                     )
             )
     })
-    TaskGetDto findByIdForCurrentUser(@PathVariable Long id);
+    TaskGetDto findByIdForCurrentUser(@PathVariable Long id, @RequestParam(value = "cacheMode", defaultValue = "NONE_CACHE") CacheMode cacheMode);
 
     @Operation(
             method = "POST",
@@ -309,7 +310,7 @@ public interface TaskOpenApi {
                     )
             )
     })
-    TaskGetBasicDto create(@RequestBody TaskCreateDto dto);
+    TaskGetBasicDto create(@RequestBody TaskCreateDto dto, @RequestParam(value = "cacheMode", defaultValue = "NONE_CACHE") CacheMode cacheMode);
 
     @Operation(
             method = "PATCH",
@@ -378,7 +379,7 @@ public interface TaskOpenApi {
                     )
             )
     })
-    TaskGetDto update(@PathVariable Long id, @RequestBody TaskUpdateDto dto);
+    TaskGetDto update(@PathVariable Long id, @RequestBody TaskUpdateDto dto, @RequestParam(value = "cacheMode", defaultValue = "NONE_CACHE") CacheMode cacheMode);
 
     @Operation(
             method = "PATCH",
@@ -434,7 +435,7 @@ public interface TaskOpenApi {
                     )
             )
     })
-    TaskGetDto updateStatus(@PathVariable Long id, @RequestBody TaskUserUpdateDto dto);
+    TaskGetDto updateStatus(@PathVariable Long id, @RequestBody TaskUserUpdateDto dto, @RequestParam(value = "cacheMode", defaultValue = "NONE_CACHE") CacheMode cacheMode);
 
 
     @Operation(
@@ -476,5 +477,5 @@ public interface TaskOpenApi {
                     )
             )
     })
-    void delete(@PathVariable Long id);
+    void delete(@PathVariable Long id, @RequestParam(value = "cacheMode", defaultValue = "NONE_CACHE") CacheMode cacheMode);
 }
