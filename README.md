@@ -17,7 +17,7 @@ To run via IntelliJ IDEA Ultimate, you need to add the following environment var
 4) JWT_SECRET - secret for creating java web token
    Once the environment variables are set, you can launch the application.
 
-For launching via Docker Compose you need to rename the .evn.example file to .evn or create a .evn file  in the same folder as .evn.example. In the .evn file, you need to initialize the variables from the .evn.example file with the appropriate values. Next, you need to build the image using Maven->Lifecycle->package, upload it, and run the project using the commands below.
+For launching via Docker Compose you need to rename the .evn.example file to .evn or create a .evn file  in the same folder as .evn.example. In the .evn file, you need to initialize the variables from the .env.example file with the appropriate values. Next, you need to build the image using Maven->Lifecycle->package, upload it, and run the project using the commands below.
 
 
 ## Upload image:
